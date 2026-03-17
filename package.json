@@ -1,0 +1,20 @@
+{
+  "name": "backend-final",
+  "version": "1.0.0",
+  "description": "a backend of youtube",
+  "type": "module",
+  "main": "index.js",
+"scripts": {
+  "start": "node index.js",
+  "dev": "nodemon index.js"
+},
+  "keywords": [
+    "javascript",
+    "backend"
+  ],
+  "author": "Shivam Upadhyay",
+  "license": "ISC",
+  "devDependencies": {
+  "nodemon": "^3.1.0"
+}
+}

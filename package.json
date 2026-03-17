@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "description": "a backend of youtube",
   "type": "module",
-  "main": "index.js",
-"scripts": {
-  "start": "node index.js",
-  "dev": "nodemon index.js"
-},
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "format": "prettier --write ."
+  },
   "keywords": [
     "javascript",
     "backend"
@@ -15,6 +16,7 @@
   "author": "Shivam Upadhyay",
   "license": "ISC",
   "devDependencies": {
-  "nodemon": "^3.1.0"
-}
+    "nodemon": "^3.1.0",
+    "prettier": "^3.0.0"
+  }
 }

@@ -101,7 +101,7 @@ const loginUser = asynchandler(async (req,res)=>{
     }
   const user= await User.findOne({
         $or:[{username},{email}]
-    })
+    }).select("+password")
     if(!user){
         throw new ApiError(404,"User doesn't exist")
     }
@@ -119,7 +119,8 @@ const loginUser = asynchandler(async (req,res)=>{
 
    const options = {
      httpOnly:true,
-     secure:true
+     secure:false,
+     sameSite:"lax"
    }
 
    return res.status(200)
@@ -138,17 +139,13 @@ const loginUser = asynchandler(async (req,res)=>{
 const logoutUser = asynchandler(async(req,res) =>{
   await User.findByIdAndUpdate(req.user._id
     ,{
-        $set:{
-            refreshToken:undefined
-        }
-    },
-        {
-           new : true
-        }
+      $unset:{ refreshToken :1}
+ 
+    }  
   )
    const options = {
      httpOnly:true,
-     secure:true
+     secure:false
    }
    return res 
    .status(200)
@@ -177,7 +174,7 @@ const refreshAccessToken = asynchandler(async(req,res)=>{
         httpOnly:true,
         secure:true
       }
-   const {accessToken,newrefreshToken} = await generateAccessandRefereshTokens(user._id)
+   const {accessToken,refreshToken:newrefreshToken} = await generateAccessandRefereshTokens(user._id)
     return res
     .status(200)
     .cookie("accessToken",accessToken,options)
@@ -212,11 +209,21 @@ const changeCurrentPassword = asynchandler(async(req,res)=>{
     .json(new ApiResponse(200,{},"Password changed successfully"))
   })
 
-const getCurrentUser = asynchandler(async(req,res)=>{
-  return res 
-  .status(200)
-  .json(200,req.user,"current user Fetched successfully")
-})  
+// const getCurrentUser = asynchandler(async(req,res)=>{
+//   return res 
+//   .status(200)
+//   .json(200,req.user,"current user Fetched successfully")
+// })  
+const getCurrentUser = asynchandler(async (req, res) => {
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      req.user,
+      "Current user fetched successfully"
+    )
+  );
+});
+
 const updateAccountDetails = asynchandler(async(req,res)=>{
   const {fullName,email} = req.body
   if(!fullName || !email)
